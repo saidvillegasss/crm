@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barra de Escala Minimalista y Neutra (1-10)</title>
+    <!-- Solo CSS nativo, sin librerías externas -->
+    <style>
+        /* Fuente Inter de Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+        /* Estilos Globales */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfcfc; /* Blanco roto */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            margin: 0;
+            box-sizing: border-box;
+            overflow: hidden; /* Asegura que no haya barra de desplazamiento en el cuerpo */
+        }
+
+        /* Contenedor Principal (Tarjerta de la encuesta - Minimalista) */
+        .survey-container {
+            background-color: white;
+            padding: 1rem; /* Reducido el padding por defecto para más espacio horizontal en móviles */
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb; /* Borde muy sutil */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Sombra casi invisible */
+            width: 100%;
+            max-width: 35rem;
+            box-sizing: border-box;
+        }
+        @media (min-width: 768px) {
+            .survey-container {
+                padding: 2rem; /* Aumenta el padding en desktop */
+            }
+        }
+
+        /* Estilos de Texto */
+        .header-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .sub-text {
+            font-size: 0.9rem;
+            color: #070b11;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .info-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .rating-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #374151; /* Gris oscuro para el valor */
+            margin-left: 0.25rem;
+        }
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-top: 0.5rem;
+            margin-left: auto;
+            margin-right: auto;
+            width: 95%; 
+            max-width: 100%;
+        }
+        .low-label, .high-label { 
+            color: #6b7280; /* Ambos neutros, solo diferenciados por posición */
+        }
+        .message-area {
+            text-align: center;
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            height: 1.25rem;
+        }
+
+        /* Barra de Escala Container */
+        #scale-bar {
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 0.5rem;
+            width: 100%;
+            overflow: hidden; 
+            white-space: nowrap; 
+            padding: 0; 
+            box-sizing: border-box;
+            gap: 0; 
+        }
+        
+        /* Estilo para cada elemento de la escala (FLUIDO y Neutro) */
+        .scale-item {
+            /* Ajuste clave 1: Reducido a 6.5vw para garantizar que los 10 elementos (65vw) 
+               quepan cómodamente sin scroll en la pantalla más pequeña. */
+            width: 6.5vw;
+            height: 6.5vw; 
+            
+            /* Ajuste clave 2: Reducido el tamaño máximo para que sean más pequeños en desktop. */
+            max-width: 40px; 
+            max-height: 40px;
+            
+            /* Ajuste clave 3: Tamaño de fuente base ligeramente más pequeño para mejor ajuste. */
+            font-size: 0.9rem; 
+            
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9999px;
+            border: 1px solid #d1d5db; /* Borde gris claro */
+            color: #4b5563; /* Color de texto gris medio */
+            font-weight: 500;
+            background-color: #f9fafb; /* Fondo gris muy claro */
+
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            user-select: none;
+        }
+
+        /* Media query para móviles muy estrechos, para que la fuente quepa en el círculo */
+        @media (max-width: 480px) {
+            .scale-item {
+                /* Ajuste clave 4: Fuente aún más pequeña para la pantalla más pequeña. */
+                font-size: 0.75rem; 
+            }
+        }
+
+        /* Estilo al pasar el ratón */
+        .scale-item:hover {
+            transform: scale(1.05);
+            background-color: #e5e7eb; /* Gris ligeramente más oscuro en hover */
+        }
+
+        /* Estilo para los botones seleccionados (El elemento que destaca con color neutro oscuro) */
+        .scale-item.selected {
+            background-color: #374151; /* Gris oscuro fuerte */
+            color: #ffffff; /* Letra blanca */
+            font-weight: 700;
+            transform: scale(1.1);
+            box-shadow: 0 2px 5px rgba(34, 20, 226, 0.767); /* Sombra sutil y oscura */
+            border-color: #096ffd;
+        }
+
+        /* Submit Button (Minimalista y Neutro) */
+        #submit-button {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background-color: #4b5563; /* Gris medio oscuro */
+            color: white;
+            font-weight: 600;
+            border-radius: 0.3rem;
+            box-shadow: none;
+            transition: background-color 0.15s ease-in-out;
+            border: none;
+            cursor: pointer;
+            margin-top: 1.5rem;
+        }
+        #submit-button:hover:not(:disabled) {
+            background-color: #1f2937; /* Gris casi negro en hover */
+        }
+        #submit-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor Principal de la Encuesta -->
+    <div class="survey-container">
+        
+        <p class="sub-text">
+        En una escala del 0 al 10, ¿qué tan probable es que recomiendes este equipo Mesh autoinstalable a familiares o amigos?
+        </p>
+
+        <!-- Barra de Escala (1-10) -->
+        <div id="scale-bar">
+            <!-- Los 10 elementos de la escala se generarán aquí con JavaScript -->
+        </div>
+
+        <!-- Etiqueta de la escala -->
+        <div class="label-container">
+            <span class="low-label">1 (Insatisfecho)</span>
+            <span class="high-label">10 (Satisfecho)</span>
+        </div>
+        
+        <!-- Resultado de la Selección -->
+        <div class="info-text">
+            Valor Seleccionado:
+            <span id="selected-value" class="rating-value">N/A</span>
+        </div>
+
+        <!-- Botón de Envío (Simulación) -->
+        
+
+        <!-- Área de mensajes (para errores o éxito) -->
+        <p id="message-area" class="message-area"></p>
+
+    </div>
+
+    <!-- Scripts de JavaScript Puro -->
+    <script>
+        // --- Lógica de la Barra de Escala (Todo en JS puro) ---
+
+        const scaleBar = document.getElementById('scale-bar');
+        const selectedValueSpan = document.getElementById('selected-value');
+        const submitButton = document.getElementById('submit-button');
+        const messageArea = document.getElementById('message-area');
+
+        let selectedRating = 0; // El valor de la escala seleccionado localmente
+
+        /**
+         * 1. Genera y añade los 10 elementos de la escala al contenedor.
+         */
+        function createScaleItems() {
+            scaleBar.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const item = document.createElement('div');
+                item.setAttribute('data-value', i);
+                // Usamos la clase CSS nativa 'scale-item'
+                item.className = 'scale-item';
+                item.textContent = i;
+                item.addEventListener('click', handleItemClick);
+                scaleBar.appendChild(item);
+            }
+        }
+
+        /**
+         * 2. Maneja el evento de clic, actualiza la selección visual y el estado.
+         */
+        function handleItemClick(event) {
+            const clickedItem = event.target;
+            const value = parseInt(clickedItem.getAttribute('data-value'));
+
+            // Limpia todas las selecciones
+            document.querySelectorAll('.scale-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Marca el elemento clickeado como seleccionado
+            clickedItem.classList.add('selected');
+
+            // Actualiza el estado local y la visualización
+            selectedRating = value;
+            selectedValueSpan.textContent = value;
+            submitButton.disabled = false;
+            messageArea.textContent = ""; // Limpiar mensajes
+        }
+
+        /**
+         * 3. Manejador del botón de envío (simulado)
+         * Simula el procesamiento de datos con un setTimeout.
+         */
+        function handleSubmit() {
+            if (selectedRating === 0) {
+                messageArea.textContent = "Por favor, selecciona un valor antes de enviar.";
+                messageArea.style.color = "#b91c1c"; // Rojo neutro para error
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Enviando...";
+
+            // Simulación de envío de datos
+            setTimeout(() => {
+                messageArea.textContent = `¡Gracias! Respuesta ${selectedRating}/10 capturada localmente.`;
+                messageArea.style.color = "#374151"; // Gris oscuro para éxito
+                
+                // Limpia la selección para un nuevo intento (opcional)
+                document.querySelectorAll('.scale-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                selectedRating = 0;
+                selectedValueSpan.textContent = "N/A";
+                
+                submitButton.textContent = "Enviar Respuesta";
+                submitButton.disabled = true; // Deshabilita hasta que se seleccione de nuevo
+            }, 1500); // Simula un retraso de 1.5 segundos
+        }
+
+        /**
+         * 4. Configuración inicial al cargar la ventana.
+         */
+        window.onload = function() {
+            createScaleItems();
+            submitButton.addEventListener('click', handleSubmit);
+            console.log("Barra de escala y listeners configurados.");
+        };
+    </script>
+</body>
+</html>
